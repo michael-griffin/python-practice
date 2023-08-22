@@ -2,14 +2,16 @@ from random import randint
 
 class WordFinder:
     """Word Finder: finds random words from a dictionary."""
-
     def __init__(self, path):
         self.path = path
         self.word_list = self.get_words()
         self.print_num()
 
-    def get_words(self):
+    def __repr__(self):
+        return f"<path={self.path} word_list={self.word_list}"
 
+    """Reads in word list from .txt file, trims whitespace on start/end"""
+    def get_words(self):
         line_list = []
         with open(self.path, "r") as file:
             for line in file:
@@ -17,8 +19,37 @@ class WordFinder:
                 line_list.append(line.strip())
         return line_list
 
+    """prints length of word_list (words read in from file)"""
     def print_num(self):
         print(f"{len(self.word_list)} words read")
 
+    """selects a random word from word_list"""
     def random(self):
         return self.word_list[randint(0,len(self.word_list)-1)]
+
+
+
+class SpecialWordFinder(WordFinder):
+    """Extends WordFinder to get random words"""
+    def __init__(self, path):
+        super().__init__(path)
+
+    """method which calls parent random(), and then checks whether selected
+    line is a real word. If not, tries until it gets one"""
+    def get_random_word(self):
+        goodword = ""
+        while len(goodword) == 0:
+            poss = super().random()
+            if  len(poss.strip()) != 0 and poss[0] != '#':
+                goodword = poss
+
+        return goodword
+
+
+# #test function by calling it a bunch
+# word_class = SpecialWordFinder("words.txt")
+
+# print(f"{word_class.word_list}")
+
+# for num in range(20):
+#     word_class.get_random_word()
