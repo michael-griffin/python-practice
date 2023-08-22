@@ -42,16 +42,20 @@ class WordFinder:
 
 
 class SpecialWordFinder(WordFinder):
-    """Extends WordFinder to get random words"""
+    """Extends WordFinder to get random words
+
+    >>> special_words = SpecialWordFinder("words.txt")
+    >>> special_words.get_random_word() in special_words.valid_words
+    True
+    """
     def __init__(self, path):
         super().__init__(path)
-
+        valid_words = [word for word in self.word_list if len(word.strip()) != 0 and word[0] != '#']
+        self.valid_words = valid_words
     """method which calls parent random(), and then checks whether selected
     line is a real word. If not, tries until it gets one"""
     def get_random_word(self):
-
-        valid_words = [word for word in self.word_list if len(word.strip()) != 0 and word[0] != '#']
-        return valid_words[randint(0,len(valid_words)-1)]
+        return self.valid_words[randint(0,len(self.valid_words)-1)]
 
 
 # #test function by calling it a bunch
