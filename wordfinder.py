@@ -1,11 +1,23 @@
 from random import randint
 
 class WordFinder:
-    """Word Finder: finds random words from a dictionary."""
+    """Word Finder: finds random words from a dictionary.
+
+    >>> wordfinder = WordFinder("words.txt")
+    >>> isinstance(wordfinder.word_list, list)
+    True
+
+    >>> isinstance(wordfinder.path, str)
+    True
+
+    >>> wordfinder.random() in wordfinder.word_list
+    True
+
+    """
     def __init__(self, path):
         self.path = path
         self.word_list = self.get_words()
-        self.print_num()
+        # self.print_num()
 
     def __repr__(self):
         return f"<path={self.path} word_list={self.word_list}"
@@ -37,13 +49,9 @@ class SpecialWordFinder(WordFinder):
     """method which calls parent random(), and then checks whether selected
     line is a real word. If not, tries until it gets one"""
     def get_random_word(self):
-        goodword = ""
-        while len(goodword) == 0:
-            poss = super().random()
-            if  len(poss.strip()) != 0 and poss[0] != '#':
-                goodword = poss
 
-        return goodword
+        valid_words = [word for word in self.word_list if len(word.strip()) != 0 and word[0] != '#']
+        return valid_words[randint(0,len(valid_words)-1)]
 
 
 # #test function by calling it a bunch
